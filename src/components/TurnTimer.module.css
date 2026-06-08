@@ -1,0 +1,37 @@
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.track {
+  flex: 1;
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: #22c55e;
+  border-radius: 999px;
+  /* Smooth shrink between 100ms ticks. */
+  transition: width 0.1s linear, background-color 0.3s ease;
+}
+
+.fill.urgent {
+  background: #ef4444;
+}
+
+.seconds {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 1.1rem;
+  min-width: 2.5ch;
+  text-align: center;
+  color: #374151;
+}
