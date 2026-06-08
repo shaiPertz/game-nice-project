@@ -1,0 +1,16 @@
+.status {
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0;
+  min-height: 1.8em;
+  color: #1f2937;
+}
+
+.x {
+  color: #2563eb;
+}
+
+.o {
+  color: #dc2626;
+}
