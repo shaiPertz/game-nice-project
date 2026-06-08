@@ -1,0 +1,43 @@
+.app {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 0.02em;
+  color: #111827;
+}
+
+.reset {
+  align-self: center;
+  padding: 12px 28px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: #4f46e5;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.05s ease;
+}
+
+.reset:hover {
+  background: #4338ca;
+}
+
+.reset:active {
+  transform: scale(0.97);
+}
+
+.reset:focus-visible {
+  outline: 3px solid #a5b4fc;
+  outline-offset: 2px;
+}
