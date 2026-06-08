@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>איקס עיגול · תיעוד הפרויקט</title>
+<style>
+  :root {
+    --bg: #0b1020;
+    --bg-soft: #121a33;
+    --surface: #161f3d;
+    --surface-2: #1d2950;
+    --border: #2a3766;
+    --text: #e7ecff;
+    --muted: #97a3cc;
+    --brand: #6c8cff;
+    --brand-2: #9d6cff;
+    --accent: #4fd1c5;
+    --ok: #46d18a;
+    --warn: #ffcd6b;
+    --x: #6c8cff;
+    --o: #ff7eb6;
+    --code-bg: #0d1430;
+    --shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.7);
+    --radius: 18px;
+    font-family: "Segoe UI", "Assistant", system-ui, -apple-system, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(1100px 600px at 90% -10%, rgba(108, 140, 255, 0.18), transparent 60%),
+      radial-gradient(900px 500px at -10% 10%, rgba(157, 108, 255, 0.16), transparent 55%),
+      var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--brand); text-decoration: none; }
+
+  /* ===== Top navigation ===== */
+  header.nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(14px);
+    background: rgba(11, 16, 32, 0.72);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: 0.3px;
+  }
+  .logo .mark {
+    display: inline-grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    box-shadow: 0 8px 22px -8px var(--brand);
+    font-size: 1.05rem;
+  }
+  nav.tabs {
+    display: flex;
+    gap: 6px;
+    margin-inline-start: auto;
+    flex-wrap: wrap;
+  }
+  nav.tabs button {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid transparent;
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.92rem;
+    font-weight: 600;
+    font-family: inherit;
+    transition: all 0.18s ease;
+  }
+  nav.tabs button:hover { color: var(--text); background: var(--surface); }
+  nav.tabs button.active {
+    color: #fff;
+    background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    border-color: transparent;
+    box-shadow: 0 10px 24px -12px var(--brand);
+  }
+
+  /* ===== Layout ===== */
+  main { max-width: 1080px; margin: 0 auto; padding: 40px 22px 90px; }
+  section.page { display: none; animation: fade 0.4s ease; }
+  section.page.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  h2.section-title {
+    font-size: 1.9rem;
+    margin: 0 0 6px;
+    background: linear-gradient(120deg, #fff, var(--brand));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .section-sub { color: var(--muted); margin: 0 0 30px; max-width: 70ch; }
+
+  /* ===== Hero ===== */
+  .hero {
+    text-align: center;
+    padding: 30px 10px 10px;
+  }
+  .hero .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 6vw, 3.8rem);
+    margin: 0 0 14px;
+    line-height: 1.15;
+    background: linear-gradient(120deg, #fff 20%, var(--brand) 60%, var(--brand-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero p.lead { font-size: 1.15rem; color: var(--muted); max-width: 60ch; margin: 0 auto 28px; }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin: 34px auto 0;
+    max-width: 760px;
+  }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 16px;
+    box-shadow: var(--shadow);
+  }
+  .stat .num {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--brand), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .stat .label { color: var(--muted); font-size: 0.9rem; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 30px; }
+  .pill {
+    padding: 7px 15px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: 0.88rem;
+    color: var(--text);
+  }
+  .pill b { color: var(--accent); }
+
+  /* ===== Cards ===== */
+  .grid { display: grid; gap: 18px; }
+  .grid.cols-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  .grid.cols-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 22px;
+    box-shadow: var(--shadow);
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover { transform: translateY(-3px); border-color: var(--brand); }
+  .card h3 { margin: 0 0 8px; font-size: 1.15rem; display: flex; align-items: center; gap: 10px; }
+  .card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+  .card .ico {
+    display: inline-grid; place-items: center;
+    width: 38px; height: 38px; border-radius: 11px;
+    background: linear-gradient(135deg, rgba(108,140,255,.25), rgba(157,108,255,.25));
+    border: 1px solid var(--border);
+    font-size: 1.1rem;
+  }
+
+  /* ===== Architecture diagram ===== */
+  .arch { display: grid; gap: 14px; margin-top: 10px; }
+  .layer {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    background: linear-gradient(180deg, var(--surface), var(--bg-soft));
+    position: relative;
+  }
+  .layer .layer-tag {
+    position: absolute;
+    inset-inline-start: 18px;
+    top: -11px;
+    background: var(--bg);
+    padding: 0 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  .layer .nodes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+  .node {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 13px;
+    font-size: 0.85rem;
+    font-family: "Consolas", "Courier New", monospace;
+    direction: ltr;
+  }
+  .node small { display: block; color: var(--muted); font-size: 0.72rem; font-family: var(--font); direction: rtl; }
+  .arrow { text-align: center; color: var(--brand); font-size: 1.3rem; line-height: 1; }
+
+  /* ===== Code blocks ===== */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    direction: ltr;
+    text-align: left;
+    margin: 14px 0 0;
+    font-size: 0.84rem;
+    line-height: 1.6;
+  }
+  code { font-family: "Consolas", "SF Mono", "Courier New", monospace; }
+  .tok-key { color: #ff9ecb; }
+  .tok-fn { color: #7ee0ff; }
+  .tok-str { color: #b8e994; }
+  .tok-num { color: #ffcd6b; }
+  .tok-com { color: #6b76a8; font-style: italic; }
+  .inline-code {
+    direction: ltr; display: inline-block;
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 6px; padding: 1px 7px; font-size: 0.85em; color: var(--accent);
+  }
+
+  /* ===== Sub tabs (file switcher) ===== */
+  .subtabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 26px; }
+  .subtabs button {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 9px 15px;
+    border-radius: 11px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 600;
+    display: flex; align-items: center; gap: 8px;
+    transition: all 0.15s ease;
+  }
+  .subtabs button .count {
+    background: var(--surface-2); color: var(--muted);
+    border-radius: 999px; padding: 1px 9px; font-size: 0.78rem;
+  }
+  .subtabs button:hover { color: var(--text); border-color: var(--brand); }
+  .subtabs button.active { color: #fff; border-color: var(--brand); background: var(--surface-2); }
+  .subtabs button.active .count { background: var(--brand); color: #fff; }
+
+  .file-group { display: none; }
+  .file-group.active { display: block; animation: fade 0.3s ease; }
+  .file-head {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .file-head .path {
+    font-family: "Consolas", monospace; direction: ltr;
+    color: var(--accent); font-size: 0.95rem; font-weight: 700;
+  }
+  .file-head .desc { color: var(--muted); font-size: 0.92rem; }
+
+  /* ===== Test cards ===== */
+  .test {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    margin-top: 14px;
+    overflow: hidden;
+  }
+  .test-top {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 15px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .test-top:hover { background: var(--surface-2); }
+  .check {
+    flex-shrink: 0;
+    width: 24px; height: 24px; border-radius: 7px;
+    background: rgba(70, 209, 138, 0.15);
+    border: 1px solid rgba(70, 209, 138, 0.45);
+    color: var(--ok);
+    display: grid; place-items: center;
+    font-size: 0.8rem; font-weight: 900;
+    margin-top: 3px;
+  }
+  .test-titles { flex: 1; min-width: 0; }
+  .test-name { font-weight: 700; font-size: 0.98rem; }
+  .test-desc { color: var(--muted); font-size: 0.9rem; margin-top: 2px; }
+  .test-suite {
+    font-family: "Consolas", monospace; direction: ltr;
+    font-size: 0.74rem; color: var(--brand);
+    background: var(--code-bg); border: 1px solid var(--border);
+    padding: 1px 8px; border-radius: 999px; white-space: nowrap;
+    margin-top: 3px;
+  }
+  .chev { color: var(--muted); transition: transform 0.2s ease; margin-top: 3px; }
+  .test.open .chev { transform: rotate(180deg); }
+  .test-body {
+    display: none;
+    padding: 0 18px 18px;
+    border-top: 1px solid var(--border);
+  }
+  .test.open .test-body { display: block; }
+  .test-body .why {
+    margin: 14px 0 0;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    font-size: 0.92rem;
+  }
+  .test-body .why b { color: var(--accent); }
+
+  .suite-summary {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    background: linear-gradient(135deg, rgba(70,209,138,.12), rgba(79,209,197,.08));
+    border: 1px solid rgba(70,209,138,.4);
+    border-radius: 14px; padding: 14px 18px; margin-bottom: 8px;
+  }
+  .suite-summary .big { font-size: 1.4rem; font-weight: 800; color: var(--ok); }
+
+  .runline {
+    direction: ltr; text-align: left;
+    font-family: "Consolas", monospace; font-size: 0.82rem;
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px; margin-top: 16px; color: var(--muted);
+  }
+  .runline .ok { color: var(--ok); }
+  .runline .dim { color: #6b76a8; }
+
+  footer {
+    text-align: center; color: var(--muted); font-size: 0.85rem;
+    padding: 30px 20px; border-top: 1px solid var(--border);
+  }
+  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+  .btn-mini {
+    background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+    border-radius: 9px; padding: 7px 13px; cursor: pointer; font-family: inherit;
+    font-size: 0.85rem; font-weight: 600;
+  }
+  .btn-mini:hover { color: var(--text); border-color: var(--brand); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="logo"><span class="mark">⨯⃝</span> איקס עיגול</div>
+    <nav class="tabs" id="tabs">
+      <button data-tab="overview" class="active">סקירה</button>
+      <button data-tab="architecture">ארכיטקטורה</button>
+      <button data-tab="features">פיצ'רים</button>
+      <button data-tab="unit">בדיקות יחידה</button>
+      <button data-tab="e2e">בדיקות E2E</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===================== OVERVIEW ===================== -->
+  <section class="page active" id="overview">
+    <div class="hero">
+      <span class="badge">React 19 · TypeScript · Vite</span>
+      <h1>משחק איקס-עיגול</h1>
+      <p class="lead">משחק לוח מלא בדפדפן — נגד שחקן או נגד מחשב חכם, עם טיימר לכל מהלך,
+        שלוש רמות קושי, וכיסוי בדיקות מקיף. כל הלוגיקה כתובה כפונקציות טהורות ונבדקת בבידוד.</p>
+
+      <div class="stat-row">
+        <div class="stat"><div class="num">46</div><div class="label">בדיקות יחידה (Jest)</div></div>
+        <div class="stat"><div class="num">7</div><div class="label">בדיקות E2E (Playwright)</div></div>
+        <div class="stat"><div class="num">6</div><div class="label">חבילות בדיקה</div></div>
+        <div class="stat"><div class="num">100%</div><div class="label">עוברות ✔</div></div>
+      </div>
+
+      <div class="pill-row">
+        <span class="pill">🤖 יריב מחשב מבוסס <b>Minimax</b></span>
+        <span class="pill">⏱️ טיימר לכל מהלך</span>
+        <span class="pill">🎚️ 3 רמות קושי</span>
+        <span class="pill">🏠 דף בית לבחירת מצב</span>
+        <span class="pill">♿ נגישות (ARIA)</span>
+        <span class="pill">🧩 פונקציות טהורות</span>
+      </div>
+    </div>
+
+    <div style="margin-top:60px">
+      <h2 class="section-title">מה יש כאן?</h2>
+      <p class="section-sub">דף זה מתעד את הפרויקט בשלושה צירים: הארכיטקטורה שמאחורי הקוד,
+        הפיצ'רים שנבנו, וכיסוי הבדיקות. נווט בין הלשוניות למעלה.</p>
+      <div class="grid cols-3">
+        <div class="card"><h3><span class="ico">🏗️</span> ארכיטקטורה</h3>
+          <p>הפרדת שכבות נקייה — לוגיקה טהורה, hook ייעודי לטיימר, קומפוננטות תצוגה, ו-App דק כנתב.</p></div>
+        <div class="card"><h3><span class="ico">✨</span> פיצ'רים</h3>
+          <p>מצב נגד מחשב, AI לפי רמת קושי, טיימר עם פס התקדמות, וניווט בין דף בית למשחק.</p></div>
+        <div class="card"><h3><span class="ico">🧪</span> בדיקות</h3>
+          <p>46 בדיקות יחידה ו-7 בדיקות E2E — עם הסבר על מה כל בדיקה בודקת ומה הלוגיקה שמאחוריה.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ARCHITECTURE ===================== -->
+  <section class="page" id="architecture">
+    <h2 class="section-title">ארכיטקטורה</h2>
+    <p class="section-sub">העיקרון המנחה: <b>הפרדת דאגות</b>. לוגיקת המשחק וה-AI נכתבות כפונקציות
+      טהורות בלי React — כך הן פשוטות לבדיקה ואין להן תופעות לוואי. מעליהן יושב hook לניהול זמן,
+      ואז שכבת תצוגה דקה. <span class="inline-code">App.tsx</span> הוא רק נתב בין שני מסכים.</p>
+
+    <div class="arch">
+      <div class="layer">
+        <span class="layer-tag">שכבה 4 · נתב (Router)</span>
+        <div class="nodes">
+          <div class="node">App.tsx <small>בוחר מסך: home / game ומחזיק GameConfig</small></div>
+        </div>
+      </div>
+      <div class="arrow">↓</div>
+
+      <div class="layer">
+        <span class="layer-tag">שכבה 3 · מסכים (Screens)</span>
+        <div class="nodes">
+          <div class="node">HomeScreen.tsx <small>בחירת מצב, קושי ושמות</small></div>
+          <div class="node">GameScreen.tsx <small>state המשחק + הפעלת ה-AI</small></div>
+        </div>
+      </div>
+      <div class="arrow">↓</div>
+
+      <div class="layer">
+        <span class="layer-tag">שכבה 2 · קומפוננטות תצוגה + Hooks</span>
+        <div class="nodes">
+          <div class="node">Board · Square <small>לוח 3×3</small></div>
+          <div class="node">GameStatus <small>תור / מנצח / תיקו</small></div>
+          <div class="node">TurnTimer <small>פס התקדמות</small></div>
+          <div class="node">ModeSelector · DifficultySelector · PlayerSetup</div>
+          <div class="node">useCountdown.ts <small>hook ספירה לאחור</small></div>
+        </div>
+      </div>
+      <div class="arrow">↓</div>
+
+      <div class="layer">
+        <span class="layer-tag">שכבה 1 · לוגיקה טהורה (ללא React)</span>
+        <div class="nodes">
+          <div class="node">gameLogic.ts <small>calculateWinner · isBoardFull</small></div>
+          <div class="node">ai.ts <small>getAiMove · minimax</small></div>
+          <div class="node">difficulty.ts <small>משך זמן לפי קושי</small></div>
+          <div class="node">gameMode.ts <small>טיפוסים וקבועים</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid cols-2" style="margin-top:30px">
+      <div class="card">
+        <h3><span class="ico">🎯</span> למה פונקציות טהורות?</h3>
+        <p>הלוגיקה ב-<span class="inline-code">gameLogic.ts</span> ו-<span class="inline-code">ai.ts</span>
+          מקבלת קלט ומחזירה פלט, בלי state ובלי DOM. לכן אפשר לבדוק אותה ישירות ב-Jest —
+          למשל לשחק משחק מלא מול ה-minimax ולוודא שהוא לעולם לא מפסיד.</p>
+      </div>
+      <div class="card">
+        <h3><span class="ico">🔁</span> זרימת מהלך</h3>
+        <p>לחיצה על משבצת ← <span class="inline-code">placeMark</span> מעדכן את הלוח ומעלה
+          <span class="inline-code">turnId</span> ← הטיימר מתאפס ← אם תור המחשב, effect מפעיל
+          את <span class="inline-code">getAiMove</span> אחרי השהיה קצרה.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:34px;font-size:1.2rem">דוגמה: הליבה הטהורה — <span class="inline-code">calculateWinner</span></h3>
+    <pre><code><span class="tok-com">/** מחזיר את המנצח ואת הקו המנצח, או null אם אין מנצח עדיין. */</span>
+<span class="tok-key">export function</span> <span class="tok-fn">calculateWinner</span>(squares: SquareValue[]): WinResult | <span class="tok-key">null</span> {
+  <span class="tok-key">for</span> (<span class="tok-key">const</span> line <span class="tok-key">of</span> WINNING_LINES) {
+    <span class="tok-key">const</span> [a, b, c] = line;
+    <span class="tok-key">if</span> (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      <span class="tok-key">return</span> { winner: squares[a] <span class="tok-key">as</span> Player, line: [a, b, c] };
+    }
+  }
+  <span class="tok-key">return</span> <span class="tok-key">null</span>;
+}</code></pre>
+
+    <h3 style="margin-top:30px;font-size:1.2rem">דוגמה: ה-AI הבלתי-מנוצח — <span class="inline-code">minimax</span></h3>
+    <pre><code><span class="tok-com">// קל = אקראי · בינוני = נצח⇐חסום⇐אקראי · קשה = minimax</span>
+<span class="tok-key">export function</span> <span class="tok-fn">getAiMove</span>(squares, aiMark, difficulty): <span class="tok-key">number</span> {
+  <span class="tok-key">switch</span> (difficulty) {
+    <span class="tok-key">case</span> <span class="tok-str">'easy'</span>:   <span class="tok-key">return</span> <span class="tok-fn">randomMove</span>(squares);
+    <span class="tok-key">case</span> <span class="tok-str">'medium'</span>: <span class="tok-com">// קח ניצחון, אחרת חסום, אחרת אקראי</span>
+      <span class="tok-key">return</span> <span class="tok-fn">findWinningMove</span>(squares, aiMark)
+        ?? <span class="tok-fn">findWinningMove</span>(squares, <span class="tok-fn">opponentOf</span>(aiMark))
+        ?? <span class="tok-fn">randomMove</span>(squares);
+    <span class="tok-key">case</span> <span class="tok-str">'hard'</span>:   <span class="tok-key">return</span> <span class="tok-fn">minimax</span>(squares, aiMark, aiMark, <span class="tok-num">0</span>).move;
+  }
+}</code></pre>
+  </section>
+
+  <!-- ===================== FEATURES ===================== -->
+  <section class="page" id="features">
+    <h2 class="section-title">פיצ'רים</h2>
+    <p class="section-sub">הפרויקט התפתח בשלושה גלים: המשחק הבסיסי, הטיימר ורמות הקושי,
+      ולבסוף דף הבית ומצב המחשב. כל פיצ'ר תוכנן עם בדיקות משלו.</p>
+
+    <div class="grid cols-2">
+      <div class="card"><h3><span class="ico">🎮</span> משחק בסיסי (PvP)</h3>
+        <p>לוח 3×3, החלפת תורים אוטומטית, זיהוי ניצחון בשורה/עמודה/אלכסון, זיהוי תיקו,
+          והדגשת הקו המנצח. כפתור "משחק חדש" מנקה את הלוח ושומר את ההגדרות.</p></div>
+
+      <div class="card"><h3><span class="ico">👤</span> שמות שחקנים</h3>
+        <p>כל שחקן מזין את שמו, והשם מופיע בתצוגת התור ובהודעת הניצחון. שדה ריק נופל
+          לברירת מחדל ("שחקן X" / "שחקן O").</p></div>
+
+      <div class="card"><h3><span class="ico">🤖</span> נגד מחשב (PvC)</h3>
+        <p>השחקן האנושי הוא X (ראשון), המחשב הוא O ומגיב מיד אחרי השהיה קצרה לתחושה טבעית.
+          חוזק ה-AI מתאים את עצמו לרמת הקושי שנבחרה.</p></div>
+
+      <div class="card"><h3><span class="ico">🧠</span> AI לפי רמת קושי</h3>
+        <p><b>קל</b> — מהלך אקראי. <b>בינוני</b> — מנצח אם אפשר, אחרת חוסם את היריב, אחרת אקראי.
+          <b>קשה</b> — אלגוריתם <span class="inline-code">minimax</span> שמשחק מושלם ולעולם לא מפסיד.</p></div>
+
+      <div class="card"><h3><span class="ico">⏱️</span> טיימר לכל מהלך</h3>
+        <p>פס התקדמות מתרוקן ככל שהזמן אוזל (אדום מתחת ל-3 שניות). אם הזמן נגמר —
+          השחקן מאבד את התור והוא עובר ליריב. ב-PvC הטיימר רץ רק בתור האדם.</p></div>
+
+      <div class="card"><h3><span class="ico">🎚️</span> שלוש רמות קושי</h3>
+        <p>הקושי קובע גם את משך הזמן לכל מהלך: קל = 15 שניות, בינוני = 10, קשה = 5 —
+          וגם את חוזק ה-AI במצב נגד מחשב.</p></div>
+
+      <div class="card"><h3><span class="ico">🏠</span> דף בית</h3>
+        <p>לפני המשחק בוחרים מצב (שחקן/מחשב), רמת קושי ושמות. הבחירות נשמרות בחזרה מהמשחק.
+          הניווט מבוסס state פנימי (<span class="inline-code">screen: 'home' | 'game'</span>) ללא router.</p></div>
+
+      <div class="card"><h3><span class="ico">♿</span> נגישות</h3>
+        <p>הלוח מסומן ב-<span class="inline-code">role="grid"</span>, הסטטוס ב-<span class="inline-code">role="status"</span>,
+          הטיימר ב-<span class="inline-code">role="timer"</span> עם <span class="inline-code">aria-label</span>,
+          וכל הבוררים עם <span class="inline-code">aria-pressed</span>.</p></div>
+    </div>
+  </section>
+
+  <!-- ===================== UNIT TESTS ===================== -->
+  <section class="page" id="unit">
+    <h2 class="section-title">בדיקות יחידה — Jest</h2>
+    <p class="section-sub">46 בדיקות ב-6 חבילות, כולן עוברות. בחר קובץ למטה והרחב כל בדיקה
+      כדי לראות מה היא בודקת ומה הלוגיקה שמאחוריה.</p>
+
+    <div class="suite-summary">
+      <span class="big">✔ 46 / 46</span>
+      <span style="color:var(--muted)">כל הבדיקות עוברות · 6 חבילות · ~10 שניות ריצה</span>
+    </div>
+    <div class="runline">
+      <span class="dim">$ npm test</span><br>
+      <span class="ok">PASS</span> src/game/difficulty.test.ts<br>
+      <span class="ok">PASS</span> src/game/ai.test.ts<br>
+      <span class="ok">PASS</span> src/game/gameLogic.test.ts<br>
+      <span class="ok">PASS</span> src/components/__tests__/App.test.tsx<br>
+      <span class="ok">PASS</span> src/components/__tests__/HomeScreen.test.tsx<br>
+      <span class="ok">PASS</span> src/components/__tests__/GameScreen.test.tsx<br>
+      <br>Test Suites: <span class="ok">6 passed</span>, 6 total · Tests: <span class="ok">46 passed</span>, 46 total
+    </div>
+
+    <div class="subtabs" id="unit-subtabs" style="margin-top:24px">
+      <button data-file="gameLogic" class="active">gameLogic <span class="count">11</span></button>
+      <button data-file="ai">ai <span class="count">10</span></button>
+      <button data-file="difficulty">difficulty <span class="count">7</span></button>
+      <button data-file="gamescreen">GameScreen <span class="count">13</span></button>
+      <button data-file="homescreen">HomeScreen <span class="count">4</span></button>
+      <button data-file="app">App <span class="count">1</span></button>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn-mini" id="expand-all">פתח הכל</button>
+      <button class="btn-mini" id="collapse-all">סגור הכל</button>
+    </div>
+
+    <!-- gameLogic -->
+    <div class="file-group active" data-file="gameLogic">
+      <div class="file-head"><span class="path">src/game/gameLogic.test.ts</span>
+        <span class="desc">הליבה הטהורה: זיהוי מנצח, לוח מלא, ולוח ריק.</span></div>
+    </div>
+
+    <!-- ai -->
+    <div class="file-group" data-file="ai">
+      <div class="file-head"><span class="path">src/game/ai.test.ts</span>
+        <span class="desc">יריב המחשב — מהלכים זמינים, חיסום/ניצחון, ו-minimax בלתי-מנוצח.</span></div>
+    </div>
+
+    <!-- difficulty -->
+    <div class="file-group" data-file="difficulty">
+      <div class="file-head"><span class="path">src/game/difficulty.test.ts</span>
+        <span class="desc">קונפיגורציית הקושי ומשך הזמן לכל רמה.</span></div>
+    </div>
+
+    <!-- gamescreen -->
+    <div class="file-group" data-file="gamescreen">
+      <div class="file-head"><span class="path">src/components/__tests__/GameScreen.test.tsx</span>
+        <span class="desc">משחקיות, טיימר ומצב נגד מחשב — עם fake timers.</span></div>
+    </div>
+
+    <!-- homescreen -->
+    <div class="file-group" data-file="homescreen">
+      <div class="file-head"><span class="path">src/components/__tests__/HomeScreen.test.tsx</span>
+        <span class="desc">דף הבית — שדות שמות לפי מצב ובניית ה-GameConfig.</span></div>
+    </div>
+
+    <!-- app -->
+    <div class="file-group" data-file="app">
+      <div class="file-head"><span class="path">src/components/__tests__/App.test.tsx</span>
+        <span class="desc">ניווט: דף בית ← משחק ← חזרה.</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== E2E ===================== -->
+  <section class="page" id="e2e">
+    <h2 class="section-title">בדיקות E2E — Playwright</h2>
+    <p class="section-sub">7 תרחישים מקצה-לקצה שמריצים את האפליקציה בדפדפן אמיתי דרך דף הבית,
+      בדיוק כמו משתמש. הרחב כל תרחיש כדי לראות את הצעדים.</p>
+
+    <div class="suite-summary">
+      <span class="big">✔ 7 תרחישים</span>
+      <span style="color:var(--muted)">מריצים את כל זרימת המשתמש — מדף הבית ועד הודעת הניצחון</span>
+    </div>
+    <div class="runline">
+      <span class="dim">$ npm run e2e</span> &nbsp;<span class="dim"># playwright test · e2e/game.spec.ts</span>
+    </div>
+
+    <div class="toolbar" style="margin-top:24px">
+      <button class="btn-mini" id="expand-all-e2e">פתח הכל</button>
+      <button class="btn-mini" id="collapse-all-e2e">סגור הכל</button>
+    </div>
+    <div id="e2e-list"></div>
+  </section>
+
+</main>
+
+<footer>
+  נבנה עם React 19 · TypeScript · Vite · Jest · Playwright &nbsp;·&nbsp; תיעוד הפרויקט
+</footer>
+
+<script>
+/* ---------- Test data ---------- */
+const UNIT = {
+  gameLogic: [
+    { suite: 'createEmptyBoard', name: 'returns a board of 9 nulls',
+      he: 'מחזיר לוח של 9 משבצות ריקות.',
+      logic: 'בודק ש-<b>createEmptyBoard()</b> יוצר מערך באורך 9 (BOARD_SIZE) שכל תאיו null — נקודת ההתחלה הנקייה של כל משחק.' },
+    { suite: 'calculateWinner', name: 'returns null for an empty board',
+      he: 'מחזיר null עבור לוח ריק.',
+      logic: 'מוודא שאין מנצח שגוי כשעוד לא שיחקו — תנאי הקצה הבסיסי ביותר.' },
+    { suite: 'calculateWinner', name: 'returns null when there is no winner',
+      he: 'מחזיר null כשהלוח מלא אבל אין קו מנצח.',
+      logic: 'לוח מלא בתבנית X O X / X O O / O X X — אף אחד מ-8 הקווים אינו אחיד, ולכן התוצאה צריכה להיות null (תיקו, לא ניצחון).' },
+    { suite: 'calculateWinner', name: 'detects a win in the top row',
+      he: 'מזהה ניצחון בשורה העליונה.',
+      logic: 'X בתאים 0,1,2. מצופה <b>{ winner: "X", line: [0,1,2] }</b> — מחזיר גם את הקו כדי להדגישו ב-UI.' },
+    { suite: 'calculateWinner', name: 'detects a win in a column',
+      he: 'מזהה ניצחון בעמודה.',
+      logic: 'O בתאים 0,3,6 (העמודה השמאלית). מאמת זיהוי על ציר אנכי, לא רק אופקי.' },
+    { suite: 'calculateWinner', name: 'detects a win on the main diagonal',
+      he: 'מזהה ניצחון באלכסון הראשי.',
+      logic: 'X בתאים 0,4,8. מכסה את אחד משני האלכסונים שקל לפספס.' },
+    { suite: 'calculateWinner', name: 'detects a win on the anti-diagonal',
+      he: 'מזהה ניצחון באלכסון המשני.',
+      logic: 'O בתאים 2,4,6. משלים את הכיסוי לשני האלכסונים.' },
+    { suite: 'calculateWinner', name: 'detects a winner for every defined winning line',
+      he: 'מזהה מנצח עבור כל אחד מ-8 הקווים המנצחים.',
+      logic: 'לולאה על כל WINNING_LINES — ממלא כל קו ב-X ומוודא שהוא מזוהה. כיסוי ממצה במקום בדיקה ידנית של כל קו בנפרד.' },
+    { suite: 'isBoardFull', name: 'is false for an empty board',
+      he: 'מחזיר false ללוח ריק.',
+      logic: 'תנאי קצה: לוח ללא מהלכים אינו מלא.' },
+    { suite: 'isBoardFull', name: 'is false when at least one cell is empty',
+      he: 'מחזיר false כשנותרה לפחות משבצת ריקה אחת.',
+      logic: '8 תאים מלאים ותא אחד null — עדיין לא מלא. מבחין בין "כמעט מלא" ל"מלא".' },
+    { suite: 'isBoardFull', name: 'is true when every cell is filled',
+      he: 'מחזיר true כשכל המשבצות מלאות.',
+      logic: 'הבסיס לזיהוי תיקו: לוח מלא + אין מנצח ⇐ תיקו.' },
+  ],
+  ai: [
+    { suite: 'availableMoves', name: 'lists every empty cell index',
+      he: 'מחזיר את אינדקסי כל המשבצות הריקות.',
+      logic: 'לוח חלקי ⇐ מצופה [1,3,4,6,8]. זו אבן הבניין של כל החלטות ה-AI — מאיפה לבחור מהלך.' },
+    { suite: 'findWinningMove', name: 'returns the cell that completes a line',
+      he: 'מחזיר את המשבצת שמשלימה קו מנצח.',
+      logic: 'ל-X יש 0 ו-1; המהלך המנצח הוא 2. הפונקציה משמשת גם לניצחון (mark = AI) וגם לחסימה (mark = יריב).' },
+    { suite: 'findWinningMove', name: 'returns null when no line is one move away',
+      he: 'מחזיר null כשאין קו במרחק מהלך אחד.',
+      logic: 'לוח ריק — אין איום מיידי. מוודא שלא מוחזר מהלך שגוי.' },
+    { suite: 'getAiMove - easy', name: 'returns a valid empty cell',
+      he: 'רמה קלה מחזירה משבצת ריקה תקפה.',
+      logic: 'מאחר שהמהלך אקראי, לא בודקים תא ספציפי אלא ש-<b>board[move] === null</b> — כלומר המהלך חוקי תמיד.' },
+    { suite: 'getAiMove - medium', name: 'takes a winning move when available',
+      he: 'בינוני לוקח מהלך מנצח כשהוא זמין.',
+      logic: 'ל-O יש 3,4 ⇐ הוא חייב לסגור ב-5 ולנצח. בודק את העדיפות הראשונה באסטרטגיית הביניים.' },
+    { suite: 'getAiMove - medium', name: 'blocks the opponent when it cannot win',
+      he: 'בינוני חוסם את היריב כשאינו יכול לנצח.',
+      logic: 'X מאיים לנצח ב-2 (יש לו 0,1); ל-O אין ניצחון ⇐ הוא חייב לחסום שם. העדיפות השנייה.' },
+    { suite: 'getAiMove - medium', name: 'prefers winning over blocking',
+      he: 'בינוני מעדיף ניצחון על פני חסימה.',
+      logic: 'O יכול לנצח ב-5, ובמקביל X מאיים ב-2. מצופה שיבחר 5 — ניצחון תמיד גובר על הגנה.' },
+    { suite: 'getAiMove - hard (minimax)', name: 'takes an immediate win',
+      he: 'קשה (minimax) לוקח ניצחון מיידי.',
+      logic: 'minimax מתעדף ניצחונות מהירים (ציון 10−depth), ולכן יסגור מיד את הקו במקום לדחות.' },
+    { suite: 'getAiMove - hard (minimax)', name: 'blocks the opponent winning move',
+      he: 'קשה חוסם את מהלך הניצחון של היריב.',
+      logic: 'X מאיים ב-2; ל-O אין ניצחון ⇐ minimax מזהה שכל מהלך אחר יוביל להפסד ובוחר לחסום.' },
+    { suite: 'getAiMove - hard (minimax)', name: 'never loses against any opponent reply',
+      he: 'קשה לעולם אינו מפסיד — מול כל תגובת יריב.',
+      logic: 'משחק <b>משחק שלם</b>: ה-AI (O) מגיב אופטימלית ליריב נאיבי (תמיד התא הפנוי הראשון). בסוף מוודאים שאין קו מנצח ל-X. זו ההוכחה שה-minimax בלתי-מנוצח.' },
+  ],
+  difficulty: [
+    { suite: 'difficulty config', name: 'defines exactly three difficulty levels',
+      he: 'מוגדרות בדיוק שלוש רמות קושי.',
+      logic: 'DIFFICULTIES.length === 3 — שומר על החוזה של ה-UI (שלושה כפתורים).' },
+    { suite: 'difficulty config', name: 'has unique ids',
+      he: 'לכל רמה מזהה ייחודי.',
+      logic: 'בדיקת Set על המזהים — מונע כפילות שתשבור את בחירת הקושי.' },
+    { suite: 'difficulty config', name: 'gives harder levels less time',
+      he: 'רמות קשות יותר מקבלות פחות זמן.',
+      logic: 'easy &gt; medium &gt; hard מבחינת משך הזמן. מאמת את עקרון התכנון: קושי גבוה = לחץ זמן גבוה.' },
+    { suite: 'difficulty config', name: 'uses a valid default difficulty',
+      he: 'ברירת המחדל היא רמה קיימת.',
+      logic: 'DEFAULT_DIFFICULTY חייב להופיע ברשימה — מונע ברירת מחדל "יתומה".' },
+    { suite: 'getDuration', name: 'returns easy = 15000 ms',
+      he: 'getDuration("easy") = 15,000 ms.',
+      logic: 'בדיקת it.each ממופה — קל נותן 15 שניות.' },
+    { suite: 'getDuration', name: 'returns medium = 10000 ms',
+      he: 'getDuration("medium") = 10,000 ms.',
+      logic: 'בינוני נותן 10 שניות.' },
+    { suite: 'getDuration', name: 'returns hard = 5000 ms',
+      he: 'getDuration("hard") = 5,000 ms.',
+      logic: 'קשה נותן 5 שניות — הערך שגם נבדק ב-E2E (forfeit אחרי ~5s).' },
+  ],
+  gamescreen: [
+    { suite: 'gameplay (PvP)', name: 'places X then O on alternating clicks',
+      he: 'מציב X ואז O בלחיצות מתחלפות.',
+      logic: 'מאמת את החלפת התורים הבסיסית — לחיצה ראשונה X, שנייה O.' },
+    { suite: 'gameplay (PvP)', name: 'shows whose turn it is and switches after a move',
+      he: 'מציג של מי התור (בשם הנבחר) ומחליף אחרי מהלך.',
+      logic: 'הסטטוס מציג "דני (X)", ואחרי מהלך "רותי (O)" — מחבר בין השם המוזן ל-state התור.' },
+    { suite: 'gameplay (PvP)', name: 'ignores clicks on an already-filled square',
+      he: 'מתעלם מלחיצה על משבצת תפוסה.',
+      logic: 'לחיצה כפולה על תא 0 אינה משנה אותו והתור אינו עובר שוב — placeMark חוסם תא תפוס.' },
+    { suite: 'gameplay (PvP)', name: 'declares the winner by name and blocks further moves',
+      he: 'מכריז על המנצח בשמו וחוסם מהלכים נוספים.',
+      logic: 'X מנצח בשורה העליונה ⇐ "המנצח … דני". לחיצה נוספת אחרי הסיום אינה מסמנת כלום.' },
+    { suite: 'gameplay (PvP)', name: 'detects a draw',
+      he: 'מזהה תיקו.',
+      logic: 'רצף מהלכים שממלא את הלוח בלי קו מנצח ⇐ הסטטוס מציג "תיקו".' },
+    { suite: 'gameplay (PvP)', name: 'highlights the winning line',
+      he: 'מדגיש את הקו המנצח.',
+      logic: 'אחרי ניצחון, בדיוק 3 משבצות מקבלות את מחלקת ה-CSS "winning" — חיבור בין line שמחזירה הלוגיקה לתצוגה.' },
+    { suite: 'gameplay (PvP)', name: 'restarts the board with the new-game button',
+      he: 'כפתור "משחק חדש" מאפס את הלוח.',
+      logic: 'אחרי מהלך, לחיצה על "משחק חדש" מנקה את הלוח ומחזירה לתור X — בלי לאבד את ההגדרות.' },
+    { suite: 'gameplay (PvP)', name: 'calls onExit from the back-to-home button',
+      he: 'כפתור "חזרה לדף הבית" קורא ל-onExit.',
+      logic: 'מאמת שה-callback של הניווט נקרא בדיוק פעם אחת — הגבול בין GameScreen ל-App.' },
+    { suite: 'move timer', name: 'forfeits the turn when time runs out without a move',
+      he: 'מפסיד את התור כשהזמן נגמר בלי מהלך.',
+      logic: 'עם fake timers, קידום של 10 שניות (בינוני) ⇐ התור עובר מ-X ל-O והלוח נשאר ריק. מאמת את skipTurn.' },
+    { suite: 'move timer', name: 'resets the timer after a move',
+      he: 'מאפס את הטיימר אחרי מהלך.',
+      logic: 'אחרי 4 שניות נותרו 6, ואז מהלך מחזיר את התצוגה ל-10 — turnId שמשתנה מאפס את useCountdown.' },
+    { suite: 'move timer', name: 'uses a shorter time on the hard difficulty',
+      he: 'משתמש בזמן קצר יותר ברמה קשה.',
+      logic: 'ברמה קשה קידום של 5 שניות בלבד כבר מעביר את התור — מחבר את difficulty לטיימר.' },
+    { suite: 'move timer', name: 'stops the timer once the game is over',
+      he: 'עוצר את הטיימר עם סיום המשחק.',
+      logic: 'אחרי ניצחון, גם קידום של 20 שניות אינו משנה דבר, ורכיב הטיימר נעלם מה-DOM (isRunning=false).' },
+    { suite: 'vs computer', name: 'computer moves after the human, then returns the turn',
+      he: 'המחשב משחק אחרי האדם ומחזיר לו את התור.',
+      logic: 'האדם משחק X ⇐ אחרי השהיית ה-AI (500ms) מופיע O אחד בלוח, והתור חוזר ל-X. מאמת את ה-effect שמפעיל את getAiMove.' },
+  ],
+  homescreen: [
+    { suite: 'HomeScreen', name: 'shows two name fields in player-vs-player mode',
+      he: 'מציג שני שדות שם במצב נגד שחקן.',
+      logic: 'במצב PvP מוצגים "שחקן X" ו-"שחקן O" — שני בני אדם.' },
+    { suite: 'HomeScreen', name: 'shows a single name field in vs-computer mode',
+      he: 'מציג שדה שם יחיד במצב נגד מחשב.',
+      logic: 'לחיצה על "נגד מחשב" מסתירה את שדה O ומציגה "השם שלך" בלבד — היריב הוא המחשב.' },
+    { suite: 'HomeScreen', name: 'starts a PvP game with the chosen settings',
+      he: 'מתחיל משחק PvP עם ההגדרות שנבחרו.',
+      logic: 'בחירת "קשה" + שמות "דני"/"רותי" ⇐ onStart נקרא עם GameConfig מדויק: mode pvp, difficulty hard, השמות.' },
+    { suite: 'HomeScreen', name: 'defaults empty names and sets the computer opponent in PvC',
+      he: 'נופל לשמות ברירת מחדל ומגדיר את המחשב כיריב ב-PvC.',
+      logic: 'בלי הזנת שם, PvC מפיק playerXName="שחקן X" ו-playerOName="מחשב". מאמת את ברירות המחדל והקבוע COMPUTER_NAME.' },
+  ],
+  app: [
+    { suite: 'App navigation', name: 'moves from the home screen to the game and back',
+      he: 'נע מדף הבית למשחק וחזרה.',
+      logic: 'בהתחלה יש "התחל משחק" ואין לוח (grid). אחרי לחיצה מופיע הלוח; "חזרה לדף הבית" מחזיר למצב ההתחלתי. מאמת את הנתב הדק ב-App.tsx.' },
+  ],
+};
+
+const E2E = [
+  { name: 'players enter names and X wins with the name shown',
+    he: 'שחקנים מזינים שמות ו-X מנצח כשהשם מוצג.',
+    steps: 'מזינים "דני"/"רותי" בדף הבית ⇐ מתחילים ⇐ הסטטוס מציג "דני" ⇐ X משלים את השורה העליונה ⇐ "המנצח … דני".' },
+  { name: 'a full board with no line ends in a draw',
+    he: 'לוח מלא ללא קו מסתיים בתיקו.',
+    steps: 'משחקים את הרצף 0,1,2,4,3,5,7,6,8 שממלא את הלוח בלי קו מנצח ⇐ הסטטוס מציג "תיקו".' },
+  { name: 'new-game button clears the board and returns to player X',
+    he: 'כפתור "משחק חדש" מנקה את הלוח וחוזר לשחקן X.',
+    steps: 'אחרי מהלך של X, לחיצה על "משחק חדש" ⇐ הלוח ריק, השם "דני" נשמר, והתור חוזר ל-(X).' },
+  { name: 'on hard difficulty a player forfeits the turn when time runs out',
+    he: 'ברמה קשה השחקן מפסיד את התור כשהזמן נגמר.',
+    steps: 'בוחרים "קשה" (5 שניות) ⇐ לא משחקים ⇐ אחרי שהטיימר פג התור עובר מ-(X) ל-(O) והלוח נשאר ריק.' },
+  { name: 'against the computer, the computer responds to the player move',
+    he: 'נגד המחשב — המחשב מגיב למהלך השחקן.',
+    steps: 'מצב "נגד מחשב", רמה "קל" ⇐ האדם משחק X ⇐ תוך 3 שניות מופיעה משבצת O אחת (תגובת המחשב).' },
+  { name: 'can return from the game to the home screen',
+    he: 'אפשר לחזור מהמשחק לדף הבית.',
+    steps: 'מתחילים משחק ⇐ הלוח נראה ⇐ לחיצה על "חזרה לדף הבית" ⇐ "התחל משחק" שוב גלוי והלוח נעלם.' },
+];
+
+/* ---------- Render helpers ---------- */
+function testCard(t) {
+  const el = document.createElement('div');
+  el.className = 'test';
+  el.innerHTML = `
+    <div class="test-top">
+      <span class="check">✓</span>
+      <div class="test-titles">
+        <div class="test-name">${t.he}</div>
+        <div class="test-desc" style="direction:ltr;text-align:left;font-size:.8rem;color:var(--muted)">it('${t.name}')</div>
+      </div>
+      <span class="test-suite">${t.suite}</span>
+      <span class="chev">▾</span>
+    </div>
+    <div class="test-body">
+      <div class="why"><b>מה נבדק:</b> ${t.logic}</div>
+    </div>`;
+  el.querySelector('.test-top').addEventListener('click', () => el.classList.toggle('open'));
+  return el;
+}
+
+function e2eCard(t, i) {
+  const el = document.createElement('div');
+  el.className = 'test';
+  el.innerHTML = `
+    <div class="test-top">
+      <span class="check">✓</span>
+      <div class="test-titles">
+        <div class="test-name">${i + 1}. ${t.he}</div>
+        <div class="test-desc" style="direction:ltr;text-align:left;font-size:.8rem;color:var(--muted)">test('${t.name}')</div>
+      </div>
+      <span class="chev">▾</span>
+    </div>
+    <div class="test-body">
+      <div class="why"><b>הצעדים:</b> ${t.steps}</div>
+    </div>`;
+  el.querySelector('.test-top').addEventListener('click', () => el.classList.toggle('open'));
+  return el;
+}
+
+/* ---------- Populate unit test groups ---------- */
+for (const [file, tests] of Object.entries(UNIT)) {
+  const group = document.querySelector(`.file-group[data-file="${file}"]`);
+  tests.forEach((t) => group.appendChild(testCard(t)));
+}
+
+/* ---------- Populate e2e ---------- */
+const e2eList = document.getElementById('e2e-list');
+E2E.forEach((t, i) => e2eList.appendChild(e2eCard(t, i)));
+
+/* ---------- Main tab navigation ---------- */
+document.querySelectorAll('#tabs button').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#tabs button').forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('section.page').forEach((s) => s.classList.remove('active'));
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+/* ---------- Unit file sub-tabs ---------- */
+document.querySelectorAll('#unit-subtabs button').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#unit-subtabs button').forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.file-group').forEach((g) => g.classList.remove('active'));
+    document.querySelector(`.file-group[data-file="${btn.dataset.file}"]`).classList.add('active');
+  });
+});
+
+/* ---------- Expand / collapse ---------- */
+document.getElementById('expand-all').addEventListener('click', () =>
+  document.querySelectorAll('.file-group.active .test').forEach((t) => t.classList.add('open')));
+document.getElementById('collapse-all').addEventListener('click', () =>
+  document.querySelectorAll('.file-group.active .test').forEach((t) => t.classList.remove('open')));
+document.getElementById('expand-all-e2e').addEventListener('click', () =>
+  document.querySelectorAll('#e2e-list .test').forEach((t) => t.classList.add('open')));
+document.getElementById('collapse-all-e2e').addEventListener('click', () =>
+  document.querySelectorAll('#e2e-list .test').forEach((t) => t.classList.remove('open')));
+</script>
+</body>
+</html>
