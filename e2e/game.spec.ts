@@ -51,3 +51,17 @@ test('reset clears the board and returns to player X, keeping names', async ({ p
   await expect(status).toContainText('דני'); // name preserved
   await expect(status).toContainText('(X)'); // back to X's turn
 });
+
+test('on hard difficulty a player forfeits the turn when time runs out', async ({ page }) => {
+  // Hard = 5 seconds per move.
+  await page.getByRole('button', { name: 'קשה' }).click();
+
+  const status = page.getByRole('status');
+  await expect(status).toContainText('(X)');
+
+  // Make no move; after the timer expires the turn passes to O.
+  await expect(status).toContainText('(O)', { timeout: 8_000 });
+
+  // No mark was placed on the board.
+  await expect(cell(page, 0)).toHaveText('');
+});
