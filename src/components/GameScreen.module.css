@@ -1,4 +1,4 @@
-.app {
+.game {
   max-width: 440px;
   margin: 0 auto;
   padding: 32px 20px 48px;
@@ -16,28 +16,49 @@
   color: #111827;
 }
 
-.reset {
-  align-self: center;
-  padding: 12px 28px;
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.primary,
+.secondary {
+  padding: 12px 24px;
   font-size: 1.05rem;
   font-weight: 600;
-  color: #ffffff;
-  background: #4f46e5;
-  border: none;
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.15s ease, transform 0.05s ease;
 }
 
-.reset:hover {
+.primary {
+  color: #ffffff;
+  background: #4f46e5;
+  border: none;
+}
+
+.primary:hover {
   background: #4338ca;
 }
 
-.reset:active {
+.secondary {
+  color: #4f46e5;
+  background: #ffffff;
+  border: 2px solid #c7d2fe;
+}
+
+.secondary:hover {
+  background: #eef2ff;
+}
+
+.primary:active,
+.secondary:active {
   transform: scale(0.97);
 }
 
-.reset:focus-visible {
+.primary:focus-visible,
+.secondary:focus-visible {
   outline: 3px solid #a5b4fc;
   outline-offset: 2px;
 }
